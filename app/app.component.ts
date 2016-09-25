@@ -1,24 +1,25 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component } from '@angular/core';
+import { ChildComponent } from './child/child.component';
 
 @Component({
   moduleId: module.id,
-  selector: 'app-child-component',
-  template: `<h1>The following number is a child component property bound to input from the parent component property</h1>
-            <h1>{{childProp}}</h1>
-            <button (click)="childIncrement()">increment child only</button>
-            <button (click)="parentIncrement()">increment parent</button>
-            <button (click)="setParentToChild()">sync parent to child</button>`,
-  styleUrls: ['child.component.css']
+  selector: 'root',
+  template: `<h1>The following number is a parent component property</h1>
+             <h1>{{parentProp}}</h1>
+             <br>
+             <app-child-component
+                [childProp]="parentProp"
+                (incrementParentEvent)="parentIncrement()"
+                (syncParentEvent)="syncParent($event)">
+             </app-child-component>`,
+  styleUrls: ['app.component.css']
 })
-export class ChildComponent {
+export class AppComponent {
   
-  @Input() childProp;
-  @Output() incrementParentEvent = new EventEmitter();
-  @Output() syncParentEvent = new EventEmitter();
+  parentProp = 567;
   
-  parentIncrement() {this.incrementParentEvent.emit(null);}
-  setParentToChild() {this.syncParentEvent.emit(this.childProp);}
- 
-  childIncrement() {this.childProp++;}
+  parentIncrement() { this.parentProp++}
+  syncParent(num) { this.parentProp = num;}
+  
   
 }
